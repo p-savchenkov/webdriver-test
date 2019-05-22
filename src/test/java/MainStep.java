@@ -1,6 +1,7 @@
 import io.qameta.htmlelements.WebPage;
 import io.qameta.htmlelements.WebPageFactory;
 import io.qameta.htmlelements.element.HtmlElement;
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
@@ -13,14 +14,21 @@ public class MainStep {
 
   WebDriver webDriver;
   JavascriptExecutor jse;
+  TestConfig cfg;
 
   MainStep(WebDriver webDriver) {
     this.webDriver = webDriver;
     this.jse = (JavascriptExecutor) webDriver;
+    this.cfg = ConfigFactory.create(TestConfig.class);
+
   }
 
-  public void open(String url) {
-    webDriver.get(url);
+  public void open(String path) {
+    webDriver.get(this.cfg.hostName() + path);
+  }
+
+  public void openSearchCarsPage() {
+    this.open("/cars/all/");
   }
 
   public void scrollPage(int scrollX, int scrollY) {
@@ -39,6 +47,10 @@ public class MainStep {
 
   public void shouldSeeAllParamsInUrl(List<String> params) {
     params.forEach(item -> assertThat(webDriver.getCurrentUrl(), containsString(item)));
+  }
+
+  public void shouldSeeParamInUrl(String param) {
+    assertThat(webDriver.getCurrentUrl(), containsString(param));
   }
 
   public SearchCarsPage onSearchCarsPage() {

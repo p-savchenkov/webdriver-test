@@ -12,7 +12,9 @@ public class WebDriverRule extends ExternalResource {
   }
 
   @Override
-  protected void after() { webDriver.quit(); }
+  protected void after() {
+    webDriver.quit();
+  }
 
   public WebDriver driver() {
     return this.webDriver;
